@@ -147,6 +147,7 @@ function App() {
         currentBoard={currentBoard}
         onBoardChange={setCurrentBoard}
         loading={loading}
+        onRefresh={loadWorkItems}
       />
     </>
   )

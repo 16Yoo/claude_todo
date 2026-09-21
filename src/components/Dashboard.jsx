@@ -13,9 +13,21 @@ export default function Dashboard({
   onDeleteWorkItem,
   onCreateSubItems,
   currentBoard,
-  onBoardChange
+  onBoardChange,
+  loading,
+  onRefresh
 }) {
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    try {
+      await onRefresh?.()
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
 
   const getBoards = () => {
     const baseBoards = [
@@ -90,10 +102,18 @@ export default function Dashboard({
             <h1 className="text-3xl font-bold text-gray-800">
               📊 협업 칸반 보드
             </h1>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">
                 {TEAMS[user.role]?.emoji} {TEAMS[user.role]?.name}
               </span>
+              <button
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium disabled:opacity-50"
+                title="데이터 새로고침"
+              >
+                {isRefreshing ? '새로고침중...' : '🔄'}
+              </button>
               <button
                 onClick={onLogout}
                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-medium"

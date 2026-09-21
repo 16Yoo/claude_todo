@@ -120,14 +120,22 @@ export const setupRealtimeListeners = {
           schema: 'public',
           table: 'work_items'
         },
-        (payload) => callback(payload)
+        (payload) => {
+          console.log('Realtime event received:', payload)
+          callback(payload)
+        }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status)
+      })
 
     return subscription
   },
 
   unsubscribe(subscription) {
-    supabase.removeChannel(subscription)
+    if (subscription) {
+      supabase.removeChannel(subscription)
+      console.log('Realtime subscription removed')
+    }
   }
 }
