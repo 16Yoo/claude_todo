@@ -17,13 +17,31 @@ export default function Dashboard({
 }) {
   const [showCreateModal, setShowCreateModal] = useState(false)
 
-  const boards = [
-    { id: 'overview', label: '통합 보드', icon: '📊' },
-    { id: 'planning', label: '기획팀', icon: '📋' },
-    { id: 'design', label: '디자인팀', icon: '🎨' },
-    { id: 'dev', label: '개발팀', icon: '💻' },
-    { id: 'my', label: '내 업무', icon: '👤' }
-  ]
+  const getBoards = () => {
+    const baseBoards = [
+      { id: 'overview', label: '통합 보드', icon: '📊' }
+    ]
+
+    if (user.role === 'overview') {
+      // 총괄팀: 모든 팀 보드 + 내 업무
+      return [
+        ...baseBoards,
+        { id: 'planning', label: '📋 기획팀', icon: '📋' },
+        { id: 'design', label: '🎨 디자인팀', icon: '🎨' },
+        { id: 'dev', label: '💻 개발팀', icon: '💻' },
+        { id: 'my', label: '👤 내 업무', icon: '👤' }
+      ]
+    } else {
+      // 팀원: 자신의 팀 + 내 업무
+      return [
+        ...baseBoards,
+        { id: user.role, label: `${TEAMS[user.role].emoji} ${TEAMS[user.role].name}`, icon: TEAMS[user.role].emoji },
+        { id: 'my', label: '👤 내 업무', icon: '👤' }
+      ]
+    }
+  }
+
+  const boards = getBoards()
 
   const renderBoard = () => {
     switch (currentBoard) {
