@@ -39,9 +39,19 @@ export default function TeamBoard({
     const parent = getParentWorkItem(workItems, parentId)
     if (!parent) return []
 
-    return Object.entries(TEAMS)
-      .filter(([key]) => key !== teamId)
-      .map(([key, team]) => {
+    // 실제로 하위 일감이 있는 팀들만 추출
+    const participatingTeams = new Set(
+      workItems
+        .filter(wi => (wi.parent_id || wi.parentId) === parentId)
+        .map(wi => wi.team_id || wi.teamId)
+    )
+
+    // 자신의 팀을 제외하고 실제 참여 팀만 표시
+    return Array.from(participatingTeams)
+      .filter(key => key && key !== teamId)
+      .map(key => {
+        const team = TEAMS[key]
+        if (!team) return null
         const teamStatus = getTeamStatus(workItems, parent.id, key)
         return {
           teamId: key,
@@ -51,6 +61,7 @@ export default function TeamBoard({
           statusLabel: STATUS_CONFIG[teamStatus].label
         }
       })
+      .filter(Boolean)
   }
 
   const handleDragOver = (e) => {
