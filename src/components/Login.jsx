@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { TEAMS } from '../types'
 
-const TEAMS = {
-  planning: { name: '기획팀', password: 'planning123', emoji: '📋' },
-  design: { name: '디자인팀', password: 'design123', emoji: '🎨' },
-  dev: { name: '개발팀', password: 'dev123', emoji: '💻' },
-  overview: { name: '총괄팀', password: 'overview123', emoji: '👑' }
+const TEAM_CREDENTIALS = {
+  planning: { password: 'planning123', role: 'TEAM_LEADER' },
+  design: { password: 'design123', role: 'TEAM_LEADER' },
+  dev: { password: 'dev123', role: 'TEAM_LEADER' },
+  overview: { password: 'overview123', role: 'ADMIN' }
 }
 
 export default function Login({ onLogin }) {
@@ -14,13 +15,15 @@ export default function Login({ onLogin }) {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    const team = TEAMS[selectedTeam]
+    const creds = TEAM_CREDENTIALS[selectedTeam]
 
-    if (password === team.password) {
+    if (password === creds.password) {
       onLogin({
+        id: `${selectedTeam}-user-${Date.now()}`,
         role: selectedTeam,
-        teamName: team.name,
-        emoji: team.emoji
+        teamName: TEAMS[selectedTeam].name,
+        emoji: TEAMS[selectedTeam].emoji,
+        userRole: creds.role
       })
       setError('')
     } else {
@@ -32,7 +35,8 @@ export default function Login({ onLogin }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">📊 칸반 보드</h1>
+        <h1 className="text-4xl font-bold text-center mb-2 text-gray-800">📊 협업 칸반</h1>
+        <p className="text-center text-gray-600 mb-8 text-sm">Team-Based Work Management System</p>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
@@ -66,7 +70,7 @@ export default function Login({ onLogin }) {
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition"
             />
             <p className="text-xs text-gray-500 mt-2">
-              💡 비밀번호: {TEAMS[selectedTeam].password}
+              💡 비밀번호: {TEAM_CREDENTIALS[selectedTeam].password}
             </p>
           </div>
 
@@ -78,20 +82,29 @@ export default function Login({ onLogin }) {
 
           <button
             type="submit"
-            className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition"
+            className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition"
           >
             로그인
           </button>
         </form>
 
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-xs text-blue-700 font-semibold mb-2">📝 테스트 계정:</p>
-          <ul className="text-xs text-blue-600 space-y-1">
-            <li>📋 기획팀: planning123</li>
-            <li>🎨 디자인팀: design123</li>
-            <li>💻 개발팀: dev123</li>
-            <li>👑 총괄팀: overview123</li>
-          </ul>
+        <div className="mt-8 space-y-4">
+          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-xs text-blue-700 font-semibold mb-2">📝 테스트 계정:</p>
+            <ul className="text-xs text-blue-600 space-y-1">
+              <li>📋 기획팀: planning123</li>
+              <li>🎨 디자인팀: design123</li>
+              <li>💻 개발팀: dev123</li>
+              <li>👑 총괄팀: overview123</li>
+            </ul>
+          </div>
+
+          <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+            <p className="text-xs text-green-700 font-semibold mb-2">✨ 샘플 데이터:</p>
+            <p className="text-xs text-green-600">
+              로그인하면 샘플 상위 일감이 자동으로 생성됩니다.
+            </p>
+          </div>
         </div>
       </div>
     </div>
