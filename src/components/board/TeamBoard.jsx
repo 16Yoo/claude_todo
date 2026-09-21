@@ -1,5 +1,5 @@
 import { WORK_ITEM_STATUS, TEAMS } from '../../types'
-import { getParentWorkItem, sortWorkItems } from '../../utils/workItemUtils'
+import { getParentWorkItem, sortWorkItems, getTeamStatus } from '../../utils/workItemUtils'
 import WorkItemCard from '../WorkItemCard'
 
 const STATUSES = [
@@ -9,6 +9,14 @@ const STATUSES = [
   { key: WORK_ITEM_STATUS.DONE, label: '완료', emoji: '✅' }
 ]
 
+const STATUS_CONFIG = {
+  [WORK_ITEM_STATUS.TODO]: { emoji: '📋', label: '할 일' },
+  [WORK_ITEM_STATUS.IN_PROGRESS]: { emoji: '⚙️', label: '진행 중' },
+  [WORK_ITEM_STATUS.REVIEW]: { emoji: '👀', label: '검토' },
+  [WORK_ITEM_STATUS.DONE]: { emoji: '✅', label: '완료' },
+  [WORK_ITEM_STATUS.BLOCKED]: { emoji: '⛔', label: '차단됨' }
+}
+
 export default function TeamBoard({
   workItems,
   teamId,
@@ -16,12 +24,33 @@ export default function TeamBoard({
   onUpdateWorkItem,
   onDeleteWorkItem
 }) {
-  const teamItems = workItems.filter(item => item.teamId === teamId)
+  const teamItems = workItems.filter(item => item.team_id === teamId || item.teamId === teamId)
 
   const getItemsByStatus = (status) => {
     return sortWorkItems(
       teamItems.filter(item => item.status === status)
     )
+  }
+
+  const getCollaboratingTeams = (item) => {
+    const parentId = item.parent_id || item.parentId
+    if (!parentId) return []
+
+    const parent = getParentWorkItem(workItems, parentId)
+    if (!parent) return []
+
+    return Object.entries(TEAMS)
+      .filter(([key]) => key !== teamId)
+      .map(([key, team]) => {
+        const teamStatus = getTeamStatus(workItems, parent.id, key)
+        return {
+          teamId: key,
+          emoji: team.emoji,
+          name: team.name,
+          statusEmoji: STATUS_CONFIG[teamStatus].emoji,
+          statusLabel: STATUS_CONFIG[teamStatus].label
+        }
+      })
   }
 
   const handleDragOver = (e) => {
@@ -50,7 +79,7 @@ export default function TeamBoard({
   return (
     <div>
       <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
-        <h2 className="text-2xl font-bold text-gray-800">{TEAMS[teamId].emoji} {teamName}</h2>
+        <h2 className="text-2xl font-bold text-gray-800">{TEAMS[teamId]?.emoji} {teamName}</h2>
         <p className="text-sm text-gray-600 mt-1">총 {teamItems.length}개 업무</p>
       </div>
 
@@ -81,10 +110,11 @@ export default function TeamBoard({
                   <WorkItemCard
                     key={item.id}
                     item={item}
-                    parentItem={item.parentId ? getParentWorkItem(workItems, item.parentId) : null}
+                    parentItem={item.parent_id || item.parentId ? getParentWorkItem(workItems, item.parent_id || item.parentId) : null}
                     onUpdate={onUpdateWorkItem}
                     onDelete={onDeleteWorkItem}
                     showParent={true}
+                    collaboratingTeams={getCollaboratingTeams(item)}
                   />
                 ))
               )}

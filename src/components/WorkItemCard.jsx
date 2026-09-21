@@ -12,7 +12,8 @@ export default function WorkItemCard({
   parentItem,
   onUpdate,
   onDelete,
-  showParent = false
+  showParent = false,
+  collaboratingTeams = []
 }) {
   const priorityConfig = PRIORITY_CONFIG[item.priority] || PRIORITY_CONFIG.MEDIUM
   const teamInfo = TEAMS[item.team_id || item.teamId]
@@ -63,15 +64,27 @@ export default function WorkItemCard({
           )}
         </div>
 
-        {item.assigneeId && (
+        {item.assignee_id && (
           <div className="text-xs text-gray-600">
-            👤 {item.assigneeId}
+            👤 {item.assignee_id}
           </div>
         )}
 
-        {item.dueDate && (
+        {(item.due_date || item.dueDate) && (
           <div className={`text-xs ${dueStatus.style}`}>
             {dueStatus.message}
+          </div>
+        )}
+
+        {collaboratingTeams && collaboratingTeams.length > 0 && (
+          <div className="pt-2 border-t border-gray-300 space-y-1">
+            <p className="text-xs font-semibold text-gray-700">협업팀 진행상황:</p>
+            {collaboratingTeams.map((teamStatus) => (
+              <div key={teamStatus.teamId} className="text-xs flex items-center justify-between">
+                <span className="text-gray-600">{teamStatus.emoji} {teamStatus.name}</span>
+                <span className="font-semibold">{teamStatus.statusEmoji} {teamStatus.statusLabel}</span>
+              </div>
+            ))}
           </div>
         )}
       </div>
