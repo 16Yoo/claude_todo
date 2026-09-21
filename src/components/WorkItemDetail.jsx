@@ -98,19 +98,19 @@ export default function WorkItemDetail({
               {workItem.priority === 'HIGH' ? '🔴' : workItem.priority === 'MEDIUM' ? '🟡' : '🔵'} {workItem.priority}
             </p>
           </div>
-          {workItem.dueDate && (
+          {(workItem.due_date || workItem.dueDate) && (
             <div>
               <p className="text-xs text-gray-500 font-semibold">마감일</p>
-              <p className="text-sm font-bold text-gray-800 mt-1">📅 {workItem.dueDate}</p>
+              <p className="text-sm font-bold text-gray-800 mt-1">📅 {workItem.due_date || workItem.dueDate}</p>
             </div>
           )}
           <div>
             <p className="text-xs text-gray-500 font-semibold">생성일</p>
-            <p className="text-sm font-bold text-gray-800 mt-1">{new Date(workItem.createdAt).toLocaleDateString('ko-KR')}</p>
+            <p className="text-sm font-bold text-gray-800 mt-1">{new Date(workItem.created_at || workItem.createdAt).toLocaleDateString('ko-KR')}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500 font-semibold">수정일</p>
-            <p className="text-sm font-bold text-gray-800 mt-1">{new Date(workItem.updatedAt).toLocaleDateString('ko-KR')}</p>
+            <p className="text-sm font-bold text-gray-800 mt-1">{new Date(workItem.updated_at || workItem.updatedAt).toLocaleDateString('ko-KR')}</p>
           </div>
         </div>
 

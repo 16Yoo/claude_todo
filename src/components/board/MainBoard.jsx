@@ -58,7 +58,7 @@ export default function MainBoard({
                   <span className="text-2xl flex-shrink-0">{getStatusEmoji(item.status)}</span>
                 </div>
 
-                {item.description && (
+                {(item.description || item.description) && (
                   <p className="text-sm text-gray-600 mb-3">{item.description}</p>
                 )}
 

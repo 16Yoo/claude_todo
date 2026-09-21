@@ -15,8 +15,8 @@ export default function WorkItemCard({
   showParent = false
 }) {
   const priorityConfig = PRIORITY_CONFIG[item.priority] || PRIORITY_CONFIG.MEDIUM
-  const teamInfo = TEAMS[item.teamId]
-  const dueStatus = getDueStatus(item.dueDate)
+  const teamInfo = TEAMS[item.team_id || item.teamId]
+  const dueStatus = getDueStatus(item.due_date || item.dueDate)
 
   const handleDragStart = (e) => {
     e.dataTransfer.effectAllowed = 'move'
