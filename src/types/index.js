@@ -18,7 +18,8 @@ export const PRIORITY = {
 export const TEAMS = {
   planning: { id: 'planning', name: '기획팀', emoji: '📋', color: 'bg-blue-100 border-blue-300' },
   design: { id: 'design', name: '디자인팀', emoji: '🎨', color: 'bg-purple-100 border-purple-300' },
-  dev: { id: 'dev', name: '개발팀', emoji: '💻', color: 'bg-green-100 border-green-300' }
+  dev: { id: 'dev', name: '개발팀', emoji: '💻', color: 'bg-green-100 border-green-300' },
+  overview: { id: 'overview', name: '총괄팀', emoji: '👑', color: 'bg-pink-100 border-pink-300' }
 }
 
 // 사용자 역할
