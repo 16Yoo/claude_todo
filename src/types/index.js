@@ -52,14 +52,14 @@ export const createWorkItem = (data) => ({
   id: data.id || Date.now().toString(),
   title: data.title,
   description: data.description || '',
-  parentId: data.parentId || null,
-  teamId: data.teamId || null,
-  assigneeId: data.assigneeId || null,
+  parent_id: data.parent_id || data.parentId || null,
+  team_id: data.team_id || data.teamId || null,
+  assignee_id: data.assignee_id || data.assigneeId || null,
   status: data.status || WORK_ITEM_STATUS.TODO,
   priority: data.priority || PRIORITY.MEDIUM,
-  dueDate: data.dueDate || null,
+  due_date: data.due_date || data.dueDate || null,
   required: data.required !== false,
   order: data.order || 0,
-  createdAt: data.createdAt || new Date().toISOString(),
-  updatedAt: data.updatedAt || new Date().toISOString()
+  created_at: data.created_at || data.createdAt || new Date().toISOString(),
+  updated_at: data.updated_at || data.updatedAt || new Date().toISOString()
 })

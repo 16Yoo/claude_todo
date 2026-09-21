@@ -156,7 +156,7 @@ function CreateWorkItemModal({ onClose, onAdd, onCreateSubItems }) {
     title: '',
     description: '',
     priority: 'MEDIUM',
-    dueDate: '',
+    due_date: '',
     teams: []
   })
 
@@ -184,10 +184,10 @@ function CreateWorkItemModal({ onClose, onAdd, onCreateSubItems }) {
     const workItem = {
       title: formData.title,
       description: formData.description,
-      parentId: null,
+      parent_id: null,
       status: 'TODO',
       priority: formData.priority,
-      dueDate: formData.dueDate,
+      due_date: formData.due_date,
       required: true
     }
 
@@ -248,8 +248,8 @@ function CreateWorkItemModal({ onClose, onAdd, onCreateSubItems }) {
             <label className="block text-sm font-semibold text-gray-700 mb-2">마감일</label>
             <input
               type="date"
-              name="dueDate"
-              value={formData.dueDate}
+              name="due_date"
+              value={formData.due_date}
               onChange={handleChange}
               className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
             />

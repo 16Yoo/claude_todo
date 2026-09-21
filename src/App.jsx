@@ -109,10 +109,10 @@ function App() {
           team_id: teamId,
           status: 'TODO',
           priority: parent.priority,
-          due_date: parent.due_date,
+          due_date: parent.due_date || '',
           required: true,
           order: i,
-          description: parent.description,
+          description: parent.description || '',
           assignee_id: null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
